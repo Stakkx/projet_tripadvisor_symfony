@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+
+<body id="login_bg">
+	
+	<nav id="menu" class="fake_menu"></nav>
+	
+	<div id="login">
+		<aside>
+			<figure>
+				<a href="{{ path('home') }}"><img src="img/logo_sticky.svg" width="165" height="35" alt="" class="logo_sticky"></a>
+			</figure>
+            <form action="{{ path('security_login') }}" method="POST">
+				<div class="form-group" >
+					<label>Email</label>
+					<input type="email" class="form-control" required name="_username" id="email">
+					<i class="icon_mail_alt"></i>
+				</div>
+				<div class="form-group">
+					<label>Password</label>
+					<input type="password" class="form-control" name="_password" id="password" value="">
+					<i class="icon_lock_alt"></i>
+                    <input type="hidden" name="_target_path" value="{{ app.request.headers.get('referer') }}"/>
+				</div>
+				<input type="submit" class="btn_1 rounded full-width" value="Login">
+				<div class="text-center add_top_10">Pas encore de compte? <strong><a href="{{ path('inscription') }}">Enregistrez vous!</a></strong></div>
+			</form>
+		</aside>
+	</div>
+	<!-- /login -->
+
+{% endblock %}

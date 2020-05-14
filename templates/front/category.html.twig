@@ -1,0 +1,172 @@
+{% extends "base.html.twig" %} 
+
+{% block body %}
+
+<div id="page">
+
+    	<header class="header_in">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-12">
+					<div id="logo">
+						<a href="{{ path('home') }}">
+							<img src="img/logo_sticky.svg" width="165" height="35" alt="" class="logo_sticky">
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-9 col-12">
+                    <!-- /top_menu -->
+                    <a href="#menu" class="btn_mobile">
+                        <div class="hamburger hamburger--spin" id="hamburger">
+                            <div class="hamburger-box">
+                                <div class="hamburger-inner"></div>
+                            </div>
+                        </div>
+                    </a>
+					<nav id="menu" class="main-menu">
+						<ul>
+							<li>
+								<span><a href="{{ path('home') }}">Home</a></span>
+							</li>
+
+							<li>
+								<span><a href="{{ path('listing') }}">Liste</a></span>
+							</li>
+							{% if is_granted('ROLE_ADMIN') %}
+							<li>
+								<span><a href="{{ path('dashboard') }}">Admin</a></span>
+							</li>
+							{% endif %}
+							{% if not app.user %}
+							<li>
+								<span><a href="{{ path('security_login') }}">Se connecter</a></span>
+							</li>
+							{% else %}
+							<li>
+								<span><a href="{{ path('security_logout') }}">Se déconnecter</a></span>
+							</li>
+							{% endif %}
+
+
+						</ul>
+					</nav>
+				</header>
+				<!-- /header -->
+
+
+	<main>
+		<div id="results">
+		   <div class="container">
+			   <div class="row">
+				   <div class="col-lg-3 col-md-4 col-10">
+					   <h4><strong> {% if etablissements.getTotalItemCount is defined %} {{ etablissements.getTotalItemCount }} {% else %}  {{ etablissements|length }} {% endif %}</strong> résultats trouvés</h4>
+				   </div>
+				   <div class="col-lg-9 col-md-8 col-2">
+					   <a href="#0" class="search_mob btn_search_mobile"></a> <!-- /recherche mobile -->
+						<div class="row no-gutters custom-search-input-2 inner">
+							<div class="col-lg-7">
+							{{ form_start(form) }}
+								<div class="form-group">
+									{{ form_row(form.q) }}
+									<i class="icon_search"></i>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								{{ form_row(form.categorie) }}	
+							</div>
+							<div class="col-lg-1">
+								<input type="submit" value="Chercher">
+								
+								{{ form_end(form) }}
+							</div>
+						</div>
+				   </div>
+			   </div>
+			   <!-- /row -->
+			   <div class="search_mob_wp">
+					<div class="custom-search-input-2">
+						<div class="form-group">
+							<input class="form-control" type="text" placeholder="Ce que vous cherchez...">
+							<i class="icon_search"></i>
+						</div>
+						<select class="wide">	
+							<option>Toutes les catégories</option>	
+							{% for cat in categories %}
+								<option value="{{ cat.id }}">{{ cat.titre }}s</option>
+							{% endfor %}
+						</select>
+						<input type="submit" value="Chercher">
+					</div>
+				</div>
+				<!-- /search_mobile -->
+		   </div>
+		   <!-- /container -->
+	   </div>
+	   <!-- /results -->
+
+		<div class="container margin_60_35">
+			<div class="row">
+				<aside class="col-lg-3" id="sidebar">
+					<div id="filters_col">
+						<a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters" id="filters_col_bt">Filters </a>
+						<div class="collapse show" id="collapseFilters">
+							<div class="filter_type">
+								Type
+							
+							</div>
+						</div>
+						<!--/collapse -->
+					</div>
+					<!--/filters col-->
+				</aside>
+				<!-- /aside -->
+
+				<div class="col-lg-9">
+					<div class="row">
+					{% for et in etablissements %}
+						<div class="col-md-6">
+							<div class="strip grid">
+								<figure>
+									<a href="{{ path('details', {'id' : et.id}) }}"><img src="{% for photo in et.photos|slice(0, 1) %}{{ photo.lien }}{% endfor %}" class="img-fluid" alt="">
+										<div class="read_more"><span>Read more</span></div>
+									</a>
+									<small>{{et.categorie.titre}}</small>
+								</figure>
+								<div class="wrapper">
+									<h3><a href="{{ path('details', {'id' : et.id}) }}">{{ et.nom }}</a></h3>
+									<small>{{ et.adresse }}</small>
+									<p>{{ et.description|slice(0,75) }}...</p>
+								</div>
+								<ul>
+									<li></li>
+									<li>
+									{% if et.commentaires|length != 0 %}
+										{% set note = 0 %}
+										{% for com in et.commentaires %}
+											{% set note = (note + com.note) %}
+										{% endfor %}
+											<div class="score"><span>Superb<em>{{ et.commentaires|length }} avis</em></span><strong>{% set moyenne = (note / et.commentaires|length)%} {{ moyenne|slice(0,3) }}</strong></div>
+									{% else %}
+										<div class="score"><span>Aucun<em> avis</em></span><strong> 0</strong></div>
+									{% endif %}
+									</li>
+								</ul>
+							</div>
+						</div>
+						<!-- /strip grid -->
+					{% endfor %}	
+					</div>
+					<!-- /row -->
+					{{ knp_pagination_render(etablissements) }}
+				</div>
+				<!-- /col -->
+			</div>		
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!--/main-->
+	
+{% include "front/footer.html.twig" %}
+
+{% endblock %}

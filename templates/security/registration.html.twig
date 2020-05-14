@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<body id="login_bg">
+<div id="login">
+		<aside>
+			<figure>
+				<a href="{{ path('home') }}"><img src="img/logo_sticky.svg" width="165" height="35" alt="" class="logo_sticky"></a>
+			</figure>
+            {{ form_start(form) }}
+
+            {{ form_row(form.pseudo, {'label': 'Nom d\'utilisateur', 'attr': {'placeholder': 'Nom...'}}) }}
+            {{ form_row(form.email, {'label': 'Adresse email', 'attr': {'placeholder': 'Mail...'}}) }}
+            {{ form_row(form.password, {'label': 'Password', 'attr': {'placeholder': 'Password...'}}) }}
+            {{ form_row(form.confirm_password, {'label': 'Confirmer password', 'attr': {'placeholder': 'Confirmer password...'}}) }}
+
+            <button type="submit" class="btn btn-succes">Inscription</button>
+            {{form_end(form)}}
+		</aside>
+	</div>
+	<!-- /login -->
+
+
+
+
+{% endblock %}

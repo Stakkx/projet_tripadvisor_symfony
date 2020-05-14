@@ -1,0 +1,71 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+
+<body class="fixed-nav sticky-footer" id="page-top">
+  <!-- Navigation-->
+
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ path('dashboard') }}">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item"><a href="{{ path('utilisateurs') }}">Utilisateurs</a></li>
+        <li class="breadcrumb-item active">Modifier</li>
+      </ol>
+		<div class="box_general">
+			<div class="header_box">
+				<h2 class="d-inline-block">Modifier utilisateur {{ user.pseudo }}</h2>
+            </div>
+            <!-- /container-wrapper-->
+            <footer class="sticky-footer">
+            <div class="container">
+                <div class="text-center">
+                </div>
+            </div>
+            </footer>
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fa fa-angle-up"></i>
+            </a>
+            <!-- Logout Modal-->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form  method="POST">
+        <div class="form-group" >
+            <label>Nom d'utilisateur</label>
+            <input type="text" class="form-control" required name="pseudo" value="{{user.pseudo}}">
+        </div>
+        <div class="form-group" >
+            <label>Email</label>
+            <input type="email" class="form-control" required name="email" value="{{user.email}}">
+        </div>
+        <div class="form-group" >
+            <label>Rôles</label>
+            <input type="text" class="form-control" required name="roles" value="{{ user.roles|json_encode() }}">
+        </div>
+        <input type="submit" class="btn_1 rounded full-width" name="modif" value="Modifier">
+	</form>
+	
+</body>
+</html>
+
+{% endblock %}

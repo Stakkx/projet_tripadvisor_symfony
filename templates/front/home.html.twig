@@ -1,0 +1,211 @@
+{% extends "base.html.twig" %} 
+
+{% block body %}
+
+<div id="page">
+		
+	<header class="header menu_fixed">
+		<div id="logo">
+			<a href="index.html" title="Sparker - Directory and listings template">
+				<img src="" width="165" height="35" alt="" class="logo_normal">
+				<img src="" width="165" height="35" alt="" class="logo_sticky">
+			</a>
+		</div>
+		<!-- /top_menu -->
+		<a href="#menu" class="btn_mobile">
+			<div class="hamburger hamburger--spin" id="hamburger">
+				<div class="hamburger-box">
+					<div class="hamburger-inner"></div>
+				</div>
+			</div>
+		</a>
+		<nav id="menu" class="main-menu">
+			<ul>
+				<li>
+                    <span><a href="{{ path('home') }}">Home</a></span>
+				</li>
+
+				<li>
+                    <span><a href="{{ path('listing') }}">Liste</a></span>
+				</li>
+				{% if is_granted('ROLE_ADMIN') %}
+				<li>
+                    <span><a href="{{ path('dashboard') }}">Admin</a></span>
+                </li>
+				{% endif %}
+				{% if not app.user %}
+				<li>
+                    <span><a href="{{ path('security_login') }}">Se connecter</a></span>
+                </li>
+				{% else %}
+				<li>
+                    <span><a href="{{ path('security_logout') }}">Se déconnecter</a></span>
+                </li>
+				{% endif %}
+
+
+			</ul>
+		</nav>
+	</header>
+	<!-- /header -->
+	
+		<section class="hero_single version_2">
+			<div class="wrapper">
+				<div class="container">
+					<h3>Trouvez ce dont vous avez besoin!</h3>
+					<p>Découvrez les meilleurs hôtels, boutiques, restaurants et bars autour de Lyon</p>
+					<form method="GET" action="{{ path('category') }}">
+						<div class="row no-gutters custom-search-input-2">
+							<div class="col-lg-5">
+									<div class="form-group">
+										<input name="q" class="form-control" type="text" placeholder="Ce que vous cherchez...">
+										<i class="icon_search"></i>
+									</div>
+								</div>
+								<div class="col-lg-4">
+									<select name="categorie" class="wide">
+										<option>Toutes les catégories</option>	
+										{% for cat in categories %}
+											<option value="{{ cat.id }}">{{ cat.titre }}s</option>
+										{% endfor %}
+									</select>
+								</div>
+								<div class="col-lg-3">
+								<input type="submit" value="Chercher">
+							</div>
+						</div>
+						<!-- /row -->
+					</form>
+				</div>
+			</div>
+		</section>
+		<!-- /hero_single -->
+
+        <div class="main_categories">
+            <div class="container">
+                <ul class="clearfix">
+				{% for cat in categories %}
+                    <li>
+                        <a href="{{ path('category', {'categorie' : cat.id}) }}">
+                            <i class="{{ cat.icon }}"></i>
+                            <h3>{{ cat.titre }}</h3>
+                        </a>
+                    </li>
+				{% endfor %}
+				<li>
+					<a href="{{ path('category')}}">
+						<i class="icon-dot-3"></i>
+						<h3>Tout</h3>
+					</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /container -->
+        </div>
+        <!-- /main_categories -->
+
+		
+
+		<div class="container margin_60_35">
+
+						
+			<div class="main_title_3">
+				<span></span>
+				<h2>Top Restaurants</h2>
+				<p>Choisisez parmi plus de 100 restaurant!.</p>
+				<a href="{{ path('category', {'id' : 1}) }}">Voir tout</a>
+			</div>
+			<div class="row add_bottom_30">
+				{% set nb = 0 %}
+				{% for et in etablissements %}
+					{% if et.categorie.titre == "Restaurant" and nb < 4 %}
+					<div class="col-lg-3 col-sm-6">
+						<a href="{{ path('details', {'id' : et.id}) }}" class="grid_item small">
+							<figure>
+								{% for photo in et.photos|slice(0, 1) %}
+										<img src="{{ photo.lien }}" alt="">
+								{% endfor %}
+								<div class="info">
+									<div class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></div>
+									<h3> {{ et.nom }} </h3>
+								</div>
+							</figure>
+						</a>
+					</div>
+					{% set nb = nb + 1 %}
+				{% endif %}
+				{% endfor %}	
+			</div>
+			<!-- /row -->
+
+			<div class="main_title_3">
+				<span></span>
+				<h2>Meilleurs Boutiques</h2>
+				<p>Une sélection de nos meilleurs boutiques.</p>
+				<a href="{{ path('category', {'id' : 4}) }}">Voir tout</a>
+			</div>
+			<div class="row add_bottom_30">
+				{% set nb = 0 %}
+				{% for et in etablissements %}
+					{% if et.categorie.titre == "Boutique" and nb < 4 %}
+						<div class="col-lg-3 col-sm-6">
+							<a href="{{ path('details', {'id' : et.id}) }}" class="grid_item small">
+								<figure>
+									{% for photo in et.photos|slice(0, 1) %}
+										<img src="{{ photo.lien }}" alt="">
+									{% endfor %}
+									<div class="info">
+										<h3>{{ et.nom }}</h3>
+									</div>
+								</figure>
+							</a>
+						</div>
+					{% set nb = nb + 1 %}
+					{% endif %}
+				{% endfor %}	
+			</div>
+			<!-- /row -->
+			
+			<div class="main_title_3">
+				<span></span>
+				<h2>Hôtels les plus populaires</h2>
+				<p>Nos hôtels les plus populaire auprès des clients.</p>
+				<a href="{{ path('category', {'id' : 3}) }}">Voir tout</a>
+			</div>
+			<div class="row">
+				{% set nb = 0 %}
+				{% for et in etablissements %}
+					{% if et.categorie.titre == "Hotel" and nb < 4 %}
+					<div class="col-lg-3 col-sm-6">
+						<a href="{{ path('details', {'id' : et.id}) }}" class="grid_item small">
+							<figure>
+								{% for photo in et.photos|slice(0, 1) %}
+										<img src="{{ photo.lien }}" alt="">
+									{% endfor %}
+								<div class="info">
+									<div class="cat_star"><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i><i class="icon_star"></i></div>
+									<h3> {{ et.nom }} </h3>
+								</div>
+							</figure>
+						</a>
+					</div>
+					{% set nb = nb + 1 %}
+				{% endif %}
+				{% endfor %}	
+			</div>
+			<!-- /row -->
+
+		</div>
+		<!-- /container -->
+
+    </main>
+
+{% include "front/footer.html.twig" %}
+
+
+
+
+
+
+
+{% endblock %}

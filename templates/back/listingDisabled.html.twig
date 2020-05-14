@@ -1,0 +1,88 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+
+<body class="fixed-nav sticky-footer" id="page-top">
+  <!-- Navigation-->
+
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ path('dashboard') }}">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Listings Désactivés</li>
+      </ol>
+		<div class="box_general">
+			<div class="header_box">
+				<h2 class="d-inline-block">Listings {% if categorie is defined %} {{categorie.titre}} {% endif %}</h2>
+				<div class="catlisting">- <a href="{{ path('listingDisabled')}}">Tout</a> -
+        {% for cat in categories %}
+            	<a href="{{ path('categorieDisabled', {'id': cat.id}) }}">{{cat.titre}}</a> -
+        {% endfor %}
+				</div>
+                
+			</div>
+			</div>
+			<div class="list_general">
+				<ul>
+            {% for et in etablissements %}
+              <li>
+						<figure>
+              {% for photo in et.photos|slice(0, 1) %}
+							<img src="{{ photo.lien }}" alt="">
+						{% endfor %}
+            </figure>
+						<small>{{et.categorie.titre}}</small>
+						<h4>{{ et.nom }}</h4>
+						<p>{{ et.description|slice(0,400) }}...</p>
+						<p><a href="{{ path('listingDetails', {'id': et.id}) }}" class="btn_1 gray"><i class="fa fa-fw fa-eye"></i> Voir item</a></p>
+						<ul class="buttons">
+							<li><a href="{{ path('enable_et', {'id': et.id}) }}" class="btn_1 gray add wishlist_close"><i class="fa fa-fw fa-check"></i> Activer</a></li>
+						</ul>
+					</li>
+                {% endfor %}
+				</ul>
+			</div>
+		</div>
+         
+		{{ knp_pagination_render(etablissements) }}
+
+	  </div>
+	  <!-- /container-fluid-->
+   	</div>
+    <!-- /container-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+</body>
+</html>
+
+{% endblock %}

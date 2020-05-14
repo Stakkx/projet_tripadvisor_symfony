@@ -1,0 +1,102 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+
+<body class="fixed-nav sticky-footer" id="page-top">
+  <!-- Navigation-->
+
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ path('dashboard') }}">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item active">Utilisateurs</li>
+      </ol>
+		<div class="box_general">
+			<div class="header_box">
+				<h2 class="d-inline-block">Utilisateurs</h2>
+                
+			</div>
+			<div class="list_general">
+				<div class="card mb-3">
+        <div class="card-header">
+          <i class="fa fa-table"></i> Tous les utilisateurs</div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Utilisateur</th>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>Modifier</th>
+                  <th>Supprimer</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <th>Utilisateur</th>
+                  <th>Email</th>
+                  <th>Rôle</th>
+                  <th>Modifier</th>
+                  <th>Supprimer</th>
+                </tr>
+              </tfoot>
+              <tbody>
+              {% for user in users %}
+                  <tr>
+                  <td>{{ user.pseudo }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>{{ user.roles|json_encode() }}</td>
+                  <td><a href="{{ path('modif_user', {'id': user.id }) }}" class="btn_1 gray add wishlist_close"><i class="fa fa-fw fa-times-circle-o"></i>Modifier</a></td>
+                  <td><a href="{{ path('delete_user', {'id': user.id }) }}" class="btn_1 gray delete wishlist_close"><i class="fa fa-fw fa-times-circle-o"></i>Supprimer</a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+	  <!-- /tables-->
+			</div>
+		</div>
+
+	  </div>
+	  <!-- /container-fluid-->
+   	</div>
+    <!-- /container-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+	
+</body>
+</html>
+
+{% endblock %}

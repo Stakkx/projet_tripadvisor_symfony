@@ -1,0 +1,29 @@
+
+    <footer class="plus_border">
+		<div class="container margin_60_35">
+			<div class="row">
+				<div class="col-lg-3 col-md-6 col-sm-6">
+					<h3 data-target="#collapse_ft_2">Categories</h3>
+					<div class="collapse dont-collapse-sm" id="collapse_ft_2">
+						<ul class="links">
+							{% for cat in categories %}
+								<li> <a href="#">{{ cat.titre }}s</a> </li>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+				<div class="col-lg-3 col-md-6 col-sm-6">
+					<h3 data-target="#collapse_ft_3">Contacts</h3>
+					<div class="collapse dont-collapse-sm" id="collapse_ft_3">
+						<ul class="contacts">
+							<li><i class="ti-email"></i><a href="#0">tristan.fazz@gmail.com</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- /row-->
+		</div>
+	</footer>
+	<!--/footer-->
+</div>
+<!-- page -->

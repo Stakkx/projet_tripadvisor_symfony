@@ -1,0 +1,348 @@
+{% extends "base.html.twig" %} 
+
+{% block body %}
+
+<div id="page">
+
+    	<header class="header_in">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-12">
+					<div id="logo">
+						<a href="index.html">
+							<img src="img/logo_sticky.svg" width="165" height="35" alt="" class="logo_sticky">
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-9 col-12">
+                    <!-- /top_menu -->
+                    <a href="#menu" class="btn_mobile">
+                        <div class="hamburger hamburger--spin" id="hamburger">
+                            <div class="hamburger-box">
+                                <div class="hamburger-inner"></div>
+                            </div>
+                        </div>
+                    </a>
+                    <nav id="menu" class="main-menu">
+						<ul>
+							<li>
+								<span><a href="{{ path('home') }}">Home</a></span>
+							</li>
+
+							<li>
+								<span><a href="{{ path('listing') }}">Liste</a></span>
+							</li>
+							{% if is_granted('ROLE_ADMIN') %}
+							<li>
+								<span><a href="{{ path('dashboard') }}">Admin</a></span>
+							</li>
+							{% endif %}
+							{% if not app.user %}
+							<li>
+								<span><a href="{{ path('security_login') }}">Se connecter</a></span>
+							</li>
+							{% else %}
+							<li>
+								<span><a href="{{ path('security_logout') }}">Se déconnecter</a></span>
+							</li>
+							{% endif %}
+
+
+						</ul>
+					</nav>
+                </header>
+                <!-- /header -->
+
+                	<main>		
+		<div class="hero_in bar_detail">
+			<div class="wrapper">
+				<span class="magnific-gallery">
+
+				{% for photo in etablissement.photos|slice(0,1) %}
+					<a href="{{ photo.lien }}" class="btn_photos" title="Voir photos" data-effect="mfp-zoom-in">Voir photos</a>
+				{% endfor %}
+
+				{% for photo in etablissement.photos|slice(1) %}
+					<a href="{{ photo.lien }}"  data-effect="mfp-zoom-in"></a>
+				{% endfor %}	
+				</span>
+			</div>
+		</div>
+		<!--/hero_in-->
+		
+		<nav class="secondary_nav sticky_horizontal_2">
+			<div class="container">
+				<ul class="clearfix">
+					<li><a href="#description" class="active">Description</a></li>
+					<li><a href="#reviews">Avis</a></li>
+					<li><a href="#avis">Laisser un avis</a></li>
+					<li><a href="#sidebar"></a></li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="container margin_60_35">
+				<div class="row">
+					<div class="col-lg-8">
+						<section id="description">
+							<div class="detail_title_1">
+								<h1>{{ etablissement.nom }}</h1>
+								<a class="address" href="https://www.google.fr/maps/search/{{ etablissement.nom }} lyon" target="_blank">{{ etablissement.adresse }}</a>
+							</div>
+							<p>{{ etablissement.description|nl2br }}</p>
+							
+							<h5 class="add_bottom_15">Boissons</h5>
+							<div class="row add_bottom_30">
+								<div class="col-md-6">
+									<ul class="bullets">
+										{% for type in etablissement.type %}
+											<li> {{ type.titre }} </li>
+										{% endfor %}	
+									</ul>
+								</div>
+								<div class="col-md-6">
+								</div>
+							</div>
+							<!-- /row -->						
+							<div class="opening">
+                                <i class="icon_clock_alt"></i>
+                                <h4>Horaires</h4>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul>
+											{% for hor in etablissement.horaire2s %}
+												<li><span>{{hor.contenu|nl2br}} </span></li>
+											{% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /opening -->
+							<hr>
+							<h5>Spécialités</h5>
+							<div class="row add_bottom_15">
+                                <div class="col-lg col-md-12">
+                                    <ul class="menu_list">
+                                        <li>
+                                            <div class="thumb">
+                                                <img src="img/menu_list_1.jpg" alt="">
+                                            </div>
+                                            <h6>Mojito <span>12€</span></h6>
+                                            <p>
+                                                Menthe / Citron / Rhum / Perrier
+                                            </p>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- /row -->
+							<hr>
+							<h3>Location</h3>
+							<iframe class="map map_single add_bottom_45" src="{{ etablissement.lienMap }}" width="700" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+							<!-- End Map -->
+						</section>
+						<!-- /section -->
+					
+						<section id="reviews">
+							<h2>Avis</h2>
+							<div class="reviews-container add_bottom_30">
+								<div class="row">
+									<div class="col-lg-3">
+										<div id="review_summary">
+
+										{% if etablissement.commentaires|length != 0 %}
+											{% set note = 0 %}
+											{% for com in etablissement.commentaires %}
+												{% set note = (note + com.note) %}
+											{% endfor %}
+												<strong>{% set moyenne = (note / etablissement.commentaires|length)%} {{ moyenne|slice(0,3) }}</strong>
+											{% if moyenne < 2 %}
+												{% set appr = "Médiocre" %}
+												<em>{{ appr }}</em>
+											{% elseif moyenne > 2 and moyenne < 3 %}
+												{% set appr = "Moyen" %}
+												<em>{{ appr }}</em>
+											{% elseif moyenne > 3 and moyenne < 4 %}
+												{% set appr = "Bon" %}	
+												<em>{{ appr }}</em>
+											{% elseif moyenne > 4 and moyenne <= 5 %}
+												{% set appr = "Excellent" %}
+												<em>{{ appr }}</em>
+											{% endif %}
+											<small>Basé sur {{ etablissement.commentaires|length }} avis</small>
+										{% else %}
+											<small>Aucun avis</small>
+										{% endif %}
+										</div>
+									</div>
+
+									{% set un = 0 %}
+									{% set deux = 0 %}
+									{% set trois = 0 %}
+									{% set quatre = 0 %}
+									{% set cinq = 0 %}
+									{% set total = 0 %}
+
+									{% for com in etablissement.commentaires %}
+										{% if com.note == 1 %}
+											{% set un = un + 1 %}
+										{% elseif com.note == 2 %}
+											{% set deux = deux + 1 %}
+										{% elseif com.note == 3 %}
+											{% set trois = trois + 1 %}
+										{% elseif com.note == 4 %}
+											{% set quatre = quatre + 1 %}
+										{% else %}
+											{% set cinq = cinq + 1 %}
+										{% endif %}
+										{% set total = total + 1 %}
+									{% endfor %}
+
+									<div class="col-lg-9">
+										<div class="row">
+											<div class="col-lg-10 col-9">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" style="width: {% if cinq != 0 %} {% set nbcinq = (cinq/total)*100 %} {{ nbcinq }}% {% endif %}" aria-valuemin="0" aria-valuemax="100"></div>
+												</div>
+											</div>
+											<div class="col-lg-2 col-3"><small><strong>5 <i class="icon_star voted"></i></strong></small></div>
+										</div>
+										<!-- /row -->
+										<div class="row">
+											<div class="col-lg-10 col-9">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" style="width: {% if quatre != 0 %} {% set nbquatre = (quatre/total)*100 %} {{ nbquatre }}% {% endif %}"  aria-valuemin="0" aria-valuemax="100"></div>
+												</div>
+											</div>
+											<div class="col-lg-2 col-3"><small><strong>4 <i class="icon_star voted"></i></strong></small></div>
+										</div>
+										<!-- /row -->
+										<div class="row">
+											<div class="col-lg-10 col-9">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" style="width: {% if trois != 0 %} {% set nbtrois = (trois/total)*100 %} {{ nbtrois }}% {% endif %}"  aria-valuemin="0" aria-valuemax="100"></div>
+												</div>
+											</div>
+											<div class="col-lg-2 col-3"><small><strong>3 <i class="icon_star voted"></i></strong></small></div>
+										</div>
+										<!-- /row -->
+										<div class="row">
+											<div class="col-lg-10 col-9">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" style="width: {% if deux != 0 %} {% set nbdeux = (deux/total)*100 %} {{ nbdeux }}% {% endif %}" aria-valuemin="0" aria-valuemax="100"></div>
+												</div>
+											</div>
+											<div class="col-lg-2 col-3"><small><strong>2 <i class="icon_star voted"></i></strong></small></div>
+										</div>
+										<!-- /row -->
+										<div class="row">
+											<div class="col-lg-10 col-9">
+												<div class="progress">
+													<div class="progress-bar" role="progressbar" style="width: {% if un != 0 %} {% set nbun = (un/total)*100 %} {{ nbun }}% {% endif %}"  aria-valuemin="0" aria-valuemax="100"></div>
+												</div>
+											</div>
+											<div class="col-lg-2 col-3"><small><strong>1  <i class="icon_star voted"></i></strong></small></div>
+										</div>
+										<!-- /row -->
+									</div>
+								</div>
+								<!-- /row -->
+							</div>
+
+							<div class="reviews-container">
+							{% for com in etablissement.commentaires %}
+								<div class="review-box clearfix">
+									<figure class="rev-thumb"><img src="img/avatar1.jpg" alt="">
+									</figure>
+									<div class="rev-content">
+										<div class="rating">
+										{% for i in 1..com.note %}
+											<i class="icon_star voted"></i>
+										{% endfor %}
+										</div>
+										<div class="rev-info">
+											{{com.user.pseudo}} – {{ com.createdAt|date('m F Y, h:m') }}:
+										</div>
+										<div class="rev-text">
+											<p>
+												{{ com.contenu }}
+											</p>
+										</div>
+									</div>
+								</div>
+								<!-- /review-box -->
+							{% endfor %}
+							</div>
+							<!-- /review-container -->
+						</section>
+						<!-- /section -->
+						<hr>
+
+							{% if is_granted('ROLE_USER') %}
+							<div class="add-review" id="avis">
+								<h5>Laisser un avis</h5>
+								<form method="POST">
+									<div class="row">
+
+										<input type="hidden" name="user" value="">
+
+										<div class="form-group col-md-6">
+											<label>Note </label>
+											<div class="custom-select-form">
+											<select name="note" id="rating_review" class="wide">
+												<option value="1">1</option>
+												<option value="2">2</option>
+												<option value="3" selected>3</option>
+												<option value="4">4</option>
+												<option value="5">5</option>
+											</select>
+											</div>
+										</div>
+										<div class="form-group col-md-12">
+											<label>Votre avis</label>
+											<textarea name="text" id="review_text" class="form-control" style="height:130px;"></textarea>
+										</div>
+										<div class="form-group col-md-12 add_top_20 add_bottom_30">
+											<input name="formCom" type="submit" value="Submit" class="btn_1" id="submit-review">
+										</div>
+									</div>
+								</form>
+							</div>
+							{% else %}
+							<div class="add-review" id="avis">
+								<h5> <a href="{{path('security_login') }}">Connectez vous pour laisser un avis!</a></h5>
+							</div>
+							{% endif %}
+					</div>
+					<!-- /col -->
+					
+					<aside class="col-lg-4" id="sidebar">
+						<div class="box_detail booking">
+							<div class="price">
+								<h5 class="d-inline">Contactez nous!</h5>
+								{% if appr is defined %}
+									<div class="score"><span>{{ appr }}<em>{{ etablissement.commentaires|length }} avis</em></span><strong> {{ moyenne|slice(0,3) }} </strong></div>
+								{% endif %}
+							</div>
+							<div id="message-contact-detail"></div>
+								<p><h5>Email:</h5> {{ etablissement.email }}</p> 
+								<p><h5>Téléphone:</h5> {{ etablissement.telephone }}</p> 
+								<p><h5>Site internet:</h5> <a href="{{ etablissement.site }}" target="_blank">{{ etablissement.site }}</a></p> 
+						</div>
+					</aside>
+				</div>
+				<!-- /row -->
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!--/main-->
+	
+{% include "front/footer.html.twig" %}
+
+{% endblock %}
+
+{% block javascripts %}
+	<!-- Map -->
+	<script src="http://maps.googleapis.com/maps/api/js"></script>
+{% endblock %}

@@ -1,0 +1,302 @@
+{% extends "base.html.twig" %} 
+
+{% block body %}
+
+<div id="page">
+
+    	<header class="header_in">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-12">
+					<div id="logo">
+						<a href="{{ path('home') }}">
+							<img src="img/logo_sticky.svg" width="165" height="35" alt="" class="logo_sticky">
+						</a>
+					</div>
+				</div>
+				<div class="col-lg-9 col-12">
+                    <!-- /top_menu -->
+                    <a href="#menu" class="btn_mobile">
+                        <div class="hamburger hamburger--spin" id="hamburger">
+                            <div class="hamburger-box">
+                                <div class="hamburger-inner"></div>
+                            </div>
+                        </div>
+                    </a>
+					<nav id="menu" class="main-menu">
+						<ul>
+							<li>
+								<span><a href="{{ path('home') }}">Home</a></span>
+							</li>
+
+							<li>
+								<span><a href="{{ path('listing') }}">Liste</a></span>
+							</li>
+							{% if is_granted('ROLE_ADMIN') %}
+							<li>
+								<span><a href="{{ path('dashboard') }}">Admin</a></span>
+							</li>
+							{% endif %}
+							{% if not app.user %}
+							<li>
+								<span><a href="{{ path('security_login') }}">Se connecter</a></span>
+							</li>
+							{% else %}
+							<li>
+								<span><a href="{{ path('security_logout') }}">Se déconnecter</a></span>
+							</li>
+							{% endif %}
+
+
+						</ul>
+					</nav>
+				</header>
+				<!-- /header -->
+
+
+	<main>
+		<div id="results">
+		   <div class="container">
+			   <div class="row">
+				   <div class="col-lg-3 col-md-4 col-10">
+					   <h4><strong>{{ etablissements|length }}</strong> résultats pour Tout</h4>
+				   </div>
+				   <div class="col-lg-9 col-md-8 col-2">
+					   <a href="#0" class="search_mob btn_search_mobile"></a> <!-- /recherche mobile -->
+						<div class="row no-gutters custom-search-input-2 inner">
+							<div class="col-lg-7">
+								<div class="form-group">
+									<input class="form-control" type="text" placeholder="Ce que vous cherchez...">
+									<i class="icon_search"></i>
+								</div>
+							</div>
+							<div class="col-lg-4">
+								<select class="wide">
+									<option>Toutes les catégories</option>	
+									{% for cat in categories %}
+										<option value="{{ cat.id }}">{{ cat.titre }}s</option>
+									{% endfor %}
+								</select>
+							</div>
+							<div class="col-lg-1">
+								<input type="submit" value="Chercher">
+							</div>
+						</div>
+				   </div>
+			   </div>
+			   <!-- /row -->
+				<div class="search_mob_wp">
+					<div class="custom-search-input-2">
+						<div class="form-group">
+							<input class="form-control" type="text" placeholder="Ce que vous cherchez...">
+							<i class="icon_search"></i>
+						</div>
+						<select class="wide">
+							<option>Toutes les catégories</option>	
+							{% for cat in categories %}
+								<option value="{{ cat.id }}">{{ cat.titre }}s</option>
+							{% endfor %}
+						</select>
+						<input type="submit" value="Chercher">
+					</div>
+				</div>
+				<!-- /search_mobile -->
+		   </div>
+		   <!-- /container -->
+	   </div>
+	   <!-- /results -->
+		
+		<div class="filters_listing sticky_horizontal">
+			<div class="container">
+				<ul class="clearfix">
+					<li>
+						<div class="switch-field">
+							<input type="radio" id="all" name="listing_filter" value="all" checked>
+							<label for="all">All</label>
+							<input type="radio" id="popular" name="listing_filter" value="popular">
+							<label for="popular">Popular</label>
+							<input type="radio" id="latest" name="listing_filter" value="latest">
+							<label for="latest">Latest</label>
+						</div>
+					</li>
+					<li><a class="btn_filt" data-toggle="collapse" href="#filters" aria-expanded="false" aria-controls="filters" data-text-swap="Less filters" data-text-original="More filters">More filters</a></li>
+					<li>
+					</li>
+				</ul>
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /filters -->
+		
+		<div class="collapse" id="filters">
+			<div class="container margin_30_5">
+				<div class="row">
+					<div class="col-md-4">
+						<h6>Rating</h6>
+						<ul>
+							<li>
+								<label class="container_check">Superb 9+ <small>34</small>
+								  <input type="checkbox">
+								  <span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="container_check">Very Good 8+ <small>43</small>
+								  <input type="checkbox">
+								  <span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="container_check">Good 7+ <small>67</small>
+								  <input type="checkbox">
+								  <span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="container_check">Pleasant 6+ <small>89</small>
+								  <input type="checkbox">
+								  <span class="checkmark"></span>
+								</label>
+							</li>
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<h6>Tags</h6>
+						<ul>
+							<li>
+								<label class="container_check">Wireless Internet <small>23</small>
+								  <input type="checkbox">
+								  <span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="container_check">Smoking Allowed <small>43</small>
+								  <input type="checkbox">
+								  <span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="container_check">Wheelchair Accesible <small>34</small>
+								  <input type="checkbox">
+								  <span class="checkmark"></span>
+								</label>
+							</li>
+							<li>
+								<label class="container_check">Parking <small>11</small>
+								  <input type="checkbox">
+								  <span class="checkmark"></span>
+								</label>
+							</li>
+						</ul>
+					</div>
+					<div class="col-md-4">
+						<div class="add_bottom_30">
+						<h6>Distance</h6>
+							<div class="distance"> Radius around selected destination <span></span> km</div>
+							<input type="range" min="10" max="100" step="10" value="30" data-orientation="horizontal">
+						</div>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+		</div>
+		<!-- /Filters -->
+
+		<div class="container margin_60_35">
+			<div class="category_filter">
+				<label class="container_radio">All
+					<input type="radio" id="all_2" name="categories_filter" value="all" checked data-filter="*" class="selected">
+					<span class="checkmark"></span>
+				</label>
+				<label class="container_radio">Boutiques
+					<input type="radio" id="boutique" name="categories_filter" value="boutique" data-filter=".boutique">
+					<span class="checkmark"></span>
+				</label>
+				<label class="container_radio">Hôtels
+					<input type="radio" id="hotel" name="categories_filter" value="hotel" data-filter=".hotel">
+					<span class="checkmark"></span>
+				</label>
+				<label class="container_radio">Restaurants
+					<input type="radio" id="restaurant" name="categories_filter" value="restaurant" data-filter=".restaurant">
+					<span class="checkmark"></span>
+				</label>
+				<label class="container_radio">Bars
+					<input type="radio" id="bar" name="categories_filter" value="bar" data-filter=".bar">
+					<span class="checkmark"></span>
+				</label>
+			</div>
+            
+			<div class="isotope-wrapper">
+			<div class="row">
+				{% for et in etablissements %}
+				<div class="col-xl-4 col-lg-6 col-md-6 isotope-item {{et.categorie.titre|lower}}">
+					<div class="strip grid">
+						<figure>
+							<a href="{{ path('details', {'id' : et.id}) }}">
+							<img src=
+								" 
+									{% for photo in et.photos|slice(0, 1) %}
+										{{ photo.lien }}
+									{% endfor %}
+								" 
+							class="img-fluid" alt=""><div class="read_more"><span>Read more</span></div></a>
+							<small>{{ et.categorie.titre }}</small>
+						</figure>
+						<div class="wrapper">
+							<h3>
+								<a href="{{ path('details', {'id' : et.id}) }}"> {{ et.nom }} </a></h3>
+							<small> {{ et.adresse }} </small>
+							<p> {{ et.description|slice(0,75) }}... </p>
+							<a class="address" href="https://www.google.fr/maps/search/{{ et.nom }} lyon" target="_blank">Trouver sur map</a>
+						</div>
+						<ul>
+							<li></li>
+							{% if et.commentaires|length != 0 %}
+							{% set note = 0 %}
+								{% for com in et.commentaires %}
+									{% set note = (note + com.note) %}
+								{% endfor %}
+								<div class="score"><span>Superb<em>{{ et.commentaires|length }} avis</em></span><strong>{% set moyenne = (note / et.commentaires|length)%} {{ moyenne|slice(0,3) }}</strong></div>
+							{% else %}
+								<div class="score"><span>Aucun<em> avis</em></span><strong> 0</strong></div>
+							{% endif %}
+						</ul>
+					</div>
+				</div>
+				<!-- /strip grid -->
+				{% endfor %}
+			</div>
+			<!-- /row -->
+			</div>
+			<!-- /isotope-wrapper -->
+			
+			
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!--/main-->
+	
+{% include "front/footer.html.twig" %}
+
+{% endblock %}
+
+
+
+
+{% block javascripts %}
+
+	<!-- Filtre Isotope -->
+	<script src="{{ asset('js/isotope.min.js') }}"></script>
+	<script>
+	$(window).on('load', function(){
+	  var $container = $('.isotope-wrapper');
+	  $container.isotope({ itemSelector: '.isotope-item', layoutMode: 'masonry' });
+	});
+
+	$('.category_filter').on( 'click', 'input', 'change', function(){
+	  var selector = $(this).attr('data-filter');
+	  $('.isotope-wrapper').isotope({ filter: selector });
+	});
+	</script>
+{% endblock %}

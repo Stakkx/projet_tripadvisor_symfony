@@ -1,0 +1,203 @@
+{% extends 'baseBack.html.twig' %}
+
+
+{% block body %}
+
+<body class="fixed-nav sticky-footer" id="page-top">
+  <!-- Navigation-->
+
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="{{ path('dashboard') }}">Dashboard</a>
+        </li>
+		{% if etablissement.etat == 1 %}
+        	<li class="breadcrumb-item"><a href="{{ path('listingActifs') }}">Listings Actifs</a></li>
+		{% else %}
+			<li class="breadcrumb-item"><a href="{{ path('listingDisabled') }}">Listings Désactivés</a></li>
+		{% endif %}
+		<li class="breadcrumb-item active">Détails</li>
+      </ol>
+		<div class="box_general">
+			<div class="header_box">
+				<h2 class="d-inline-block">Détails</h2>
+                
+			</div>
+			
+		</div>
+
+        <div class="box_general padding_bottom">
+			<div class="header_box version_2">
+				<h2><i class="fa fa-file"></i>Info</h2>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+                <form action="" method="POST"> <!-- FORM BASIC INFO -->
+					<div class="form-group">
+						<label>Nom établissement</label>
+						<input name="nom" type="text" class="form-control" value="{{ etablissement.nom }}">
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+						<label>Categorie</label>
+						<div class="styled-select">
+						<select name="categorie">
+                            {% for cat in categories %}
+                                <option {% if etablissement.categorie.id == cat.id %} selected {% endif %}value="{{ cat.id }}">{{ cat.titre }}</option>
+                            {% endfor %}
+						</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- /row-->
+
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+						<label>Description</label>
+                        <textarea class="form-control" name="desc" rows="10">{{ etablissement.description }}</textarea>
+					</div>
+				</div>
+			</div>
+			<!-- /row-->
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Téléphone</label>
+						<input name="telephone" type="text" class="form-control" value="{{ etablissement.telephone }}">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Site web</label>
+						<input name="site" type="text" class="form-control" value="{{ etablissement.site }}">
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Email</label>
+						<input name="email" type="text" class="form-control" value="{{ etablissement.email }}">
+					</div>
+				</div>
+                <input name="basicInfo" type="submit" class="btn_1 blue" value="Valider">
+                </form> <!-- FIN FORM BASIC INFO -->
+			</div>
+		</div>
+		<!-- /box_general-->
+        <div class="box_general padding_bottom">
+			<div class="header_box version_2">
+				<h2><i class="fa fa-map-marker"></i>Localisation</h2>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+                <form action="" method="POST"> <!-- FORM LOCALISATION -->
+					<div class="form-group">
+						<label>Addresse</label>
+						<input name="adresse" type="text" class="form-control" value="{{ etablissement.adresse }}">
+					</div>
+				</div>
+                <div class="col-md-6">
+					<div class="form-group">
+						<label>Lien Map</label>
+						<input name="lienMap" type="text" class="form-control" value="{{ etablissement.lienMap }}">
+					</div>
+				</div>
+                <input name="localisation" type="submit" class="btn_1 blue" value="Valider">
+                </form> <!-- FIN FORM LOCALISATION -->
+			</div>
+			<!-- /row-->
+		</div>
+		<!-- /box_general-->
+		
+		<div class="box_general padding_bottom">
+			<div class="header_box version_2">
+				<h2><i class="fa fa-clock-o"></i>Horaire</h2>
+			</div>
+            <form action="" method="POST">
+                <div class="row">
+                    <textarea class="form-control" name="hor" rows="10">{% for hor in etablissement.horaire2s %}{{ hor.contenu }}{% endfor %}</textarea> 
+                </div>
+                <!-- /row-->
+                <input name="horaire" type="submit" class="btn_1 blue" value="Valider">
+            </form>
+				
+		</div>
+		<!-- /box_general-->
+		
+		<div class="box_general padding_bottom">
+			<div class="header_box version_2">
+				<h2><i class="fa fa-photo"></i>Photos</h2>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+                    <div class="row">
+                        {% for photo in etablissement.photos %}
+                        <div class="col-md">
+                            <div class="container-fluid">
+                                <a href="{{ photo.lien }}"> <img src="{{ photo.lien }}" alt="" width="250px" height="150px"> </a>  
+                                <a class="btn_1 gray delete" href="{{ path('delete_photo', {'id':photo.id, 'idListing': etablissement.id}) }}"><i class="fa fa-fw fa-remove"></i>Supprimer photo</a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-4">
+                        <form action="" method="POST">
+                            <div class="form-group">
+                                <input name="lienPhoto" type="text" class="form-control" placeholder="Lien">
+                            </div>
+                        <input name="photo" type="submit" class="btn_1 gray add-pricing-list-item" value="Ajouter photo">
+                        </form>
+                    </div>
+                    </div>
+					
+				</div>
+			</div>
+			<!-- /row-->
+		</div>
+		<!-- /box_general-->
+
+	  </div>
+	  <!-- /container-fluid-->
+   	</div>
+    <!-- /container-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+</body>
+</html>
+
+{% endblock %}
